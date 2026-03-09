@@ -14,10 +14,9 @@ Loyiha Linux tizimi ko'rsatkichlarini (CPU, RAM, Disk) real vaqtda kuzatish uchu
 3. Quyidagi buyruqni bering:
    ```bash
    docker-compose up -d
-
 ```
 
-Konteynerlar muvaffaqiyatli ishga tushgach, quyidagi manzillar orqali tizimni tekshirishingiz mumkin:
+## Konteynerlar muvaffaqiyatli ishga tushgach, quyidagi manzillar orqali tizimni tekshirishingiz mumkin:
 
 Python API (Metrics): http://localhost:8000/metrics — Bu yerda xom metrikalar (Prometheus formatida) ko'rinadi.
 Prometheus UI: http://localhost:9090 — Ma'lumotlar bazasining holatini va so'rovlarni (queries) tekshirish uchun.
