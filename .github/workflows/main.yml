@@ -1,0 +1,35 @@
+name: CI/CD for System Monitor
+
+on:
+  push:
+    branches: [ "main" ] # Faqat main branchga kod tushganda ishlaydi
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Kodni yuklab olish
+      uses: actions/checkout@v3
+
+    - name: Pythonni sozlash
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Kutubxonalarni o'rnatish
+      run: |
+        pip install -r app/requirements.txt
+
+    - name: Docker Image Build qilish (Test uchun)
+      run: |
+        docker build -t system-monitor:test .
+
+  deploy:
+    needs: build-and-test # Faqat build muvaffaqiyatli bo'lsa ishlaydi
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Deploy xabari
+      run: echo "Loyiha muvaffaqiyatli build bo'ldi va serverga yuborishga tayyor!"

@@ -1,0 +1,35 @@
+name: Docker CI/CD
+
+on:
+  push:
+    branches: [ "main", "master" ] # Qaysi branchga push bo'lganda ishlashi
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Kodni yuklab olish
+      uses: actions/checkout@v3
+
+    - name: .env faylini yaratish (Secrets dan)
+      run: |
+        echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .env
+        echo "CHAT_ID=${{ secrets.CHAT_ID }}" >> .env
+
+    - name: Docker Image Build qilish
+      run: |
+        docker build -t system-monitor:latest .
+
+    - name: Konteynerni test qilish (Sog'lomligini tekshirish)
+      run: |
+        docker run -d --name test-container -p 8000:8000 system-monitor:latest
+        sleep 5 # Konteyner to'liq yonishi uchun kutish
+        curl --fail http://localhost:8000/ || exit 1
+        docker stop test-container
+        docker rm test-container
+
+    - name: Build muvaffaqiyatli xabari
+      run: echo "Tabriklaymiz! Docker Image muvaffaqiyatli build bo'ldi va testdan o'tdi."

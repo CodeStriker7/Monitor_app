@@ -2,8 +2,10 @@ services:
   monitor-app:
     build: .
     container_name: system_monitor
+    env_file:
+     - .env
     ports:
-      - "8000:80"
+      - "8000:8080"
     restart: always
 
   prometheus:
@@ -20,14 +22,13 @@ services:
     image: grafana/grafana
     container_name: grafana_viz
     volumes:
-      # GRAFANA MA'LUMOTLARINI SAQLASH:
       - grafana_data:/var/lib/grafana
     ports:
       - "3000:3000"
     depends_on:
       - prometheus
 
-# Doimiy xotira (volumes) qismini e'lon qilamiz
+# Doimiy xotira (volumes)
 volumes:
   prometheus_data:
   grafana_data:
