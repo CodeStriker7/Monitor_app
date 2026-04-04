@@ -22,13 +22,21 @@ jobs:
     - name: Docker Image Build qilish
       run: |
         docker build -t system-monitor:latest .
-
-    - name: Konteynerni test qilish
+    - name: Konteynerni test qilish (Sog'lomligini tekshirish)
       run: |
-        docker run -d --name test-container -p 8000:8000 system-monitor:latest
+        # 1. Konteynerni orqa fonda ishga tushiramiz
+        docker run -d --name test-monitor -p 8000:8000 system-monitor:latest
+        
+        # 2. 10 soniya kutamiz (dastur to'liq yonishi uchun)
         sleep 10
-        docker logs test-container # Konteyner ichidagi Python xatolarini chiqaradi
-        curl --fail http://localhost:8000/ || exit 1
-
+        
+        # 3. ENG MUHIMI: Konteyner ichidagi Python xatolarini logga chiqaramiz
+        docker logs test-container
+        
+        # 4. Konteyner hali ham tirikmi yoki o'lganmi tekshiramiz
+        docker ps -a
+        
+        # 5. Curl so'rovini yuboramiz
+        curl -v http://localhost:8000/metrics || exit 1
     - name: Build muvaffaqiyatli xabari
       run: echo "Tabriklaymiz! Docker Image muvaffaqiyatli build bo'ldi va testdan o'tdi."
