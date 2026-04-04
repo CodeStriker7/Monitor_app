@@ -23,13 +23,12 @@ jobs:
       run: |
         docker build -t system-monitor:latest .
 
-    - name: Konteynerni test qilish (Sog'lomligini tekshirish)
+    - name: Konteynerni test qilish
       run: |
         docker run -d --name test-container -p 8000:8000 system-monitor:latest
-        sleep 5 # Konteyner to'liq yonishi uchun kutish
+        sleep 10
+        docker logs test-container # Konteyner ichidagi Python xatolarini chiqaradi
         curl --fail http://localhost:8000/ || exit 1
-        docker stop test-container
-        docker rm test-container
 
     - name: Build muvaffaqiyatli xabari
       run: echo "Tabriklaymiz! Docker Image muvaffaqiyatli build bo'ldi va testdan o'tdi."
